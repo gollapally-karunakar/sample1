@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>            
+    </head>
+    <body>
+        <select name="make" id="make">
+            <option value="0">Select Make:</option>
+            <option value="1">Acura</option>
+            <option value="2">BMW</option>
+        </select>
+        <select name="model" id="model">
+            <option value="model">Select Model</option>
+        </select>
+        <label for="CarSize">Your car's size is :</label>
+        <input type="text" name="carsize" id="size">
+            
+    </body>
+</html>
+    <script>
+        var a = {
+    Cars: [{
+        "id": 1,
+            "make": "Acura",
+            "model": "2.2CL/3.0CL",
+            "size": "Car"
+    }, {
+        "id": 12,
+            "make": "Acura",
+            "model": "RDX ",
+            "size": "Compact SUV"
+    }, {
+        "id": 10,
+            "make": "Acura",
+            "model": "MDX",
+            "size": "Large SUV"
+    }, {
+        "id": 74,
+            "make": "BMW",
+            "model": "128",
+            "size": "Car"
+    }, {
+        "id": 75,
+            "make": "BMW",
+            "model": "135",
+            "size": "Car"
+    }, {
+        "id": 129,
+            "make": "BMW",
+            "model": "X3 ",
+            "size": "Compact SUV"
+    }, {
+        "id": 130,
+            "make": "BMW",
+            "model": "X5",
+            "size": "Large SUV"
+    }]
+};
+$("#make").change(function () {
+    $('#model').empty().append($('<option></option>').val('Select Model').html('Select Model'));
+    var matchVal = $("#make option:selected").text();
+    a.Cars.filter(function (car) {
+        if (car.make == matchVal) {
+            $("#model").append($('<option></option>').val(car.size).html(car.model));
+        }
+    });
+});
+
+$('#model').change(function () {
+    //alert($(this).val());
+    //var getModelval = $('#model').val();
+    $('#size').val($(this).val());
+    //$('#size').val(.val(id));
+
+});
+    </script>

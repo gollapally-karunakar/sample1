@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title></title>
+        <script>
+
+               var data= {
+                   "list": 
+                   [
+                        {"name":"a","id":12,"type":"car owner"},
+                        {"name":"a","id":13,"type":"car owner"},
+                        {"name":"b","id":12,"type":"car owner"},
+                        {"name":"c","id":12,"type":"car owner"},
+                        {"name":"b","id":13,"type":"car owner2"},
+                        {"name":"c","id":14,"type":"car owner3"},
+                        {"name":"d","id":15,"type":"car owner5"}
+                    ]};
+                function showData(e)
+                {
+                    var results = [];
+                    var subRes=[];
+                    var searchField = "";
+                    var searchId="id";
+                    //console.log(searchField);
+                    var searchVal = document.getElementById('names').value;
+                    var searchIds = document.getElementById('ids').value;
+                    //console.log(searchVal);
+                    for (var i=0 ; i < data.list.length ; i++)
+                    {   
+                        if (data.list[i].name == searchVal && data.list[i].id == searchIds) {
+                            results.push(data.list[i]);
+                            console.log(results);
+                           /* if(results[i].id == searchIds)
+                            {
+                                subRes.push(results[i]);
+                                console.log(subRes);
+                            }*/
+                        }
+                        
+                        //console.log(data.list[i]);
+                    }
+                    //results = [];
+                }
+            </script>
+    </head>
+<body>
+    <select id="names">
+        <option value="select" selected disabled>select</option>
+        <option value="a">a</option>
+        <option value="b">b</option>
+        <option value="c">c</option>
+        <option value="d">d</option>
+        <option value="e">e</option>
+    </select>
+    <select id="ids">
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+    </select>
+
+    <button onclick="showData();">Click</button>
+</body>
+</html>

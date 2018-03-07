@@ -1,0 +1,224 @@
+
+<html>
+    <head>
+        <script>
+            var dataItems= {
+                "list": 
+                [
+                    {"name":"a","id":12,"type":"car owner"},
+                    {"name":"a","id":13,"type":"car owner"},
+                    {"name":"b","id":12,"type":"car owner"},
+                    {"name":"c","id":12,"type":"car owner"},
+                    {"name":"b","id":13,"type":"car owner2"},
+                    {"name":"c","id":14,"type":"car owner3"},
+                    {"name":"d","id":15,"type":"car owner5"}
+                ]};
+    
+                window.onload= function showDat()
+                {
+                    var showdata="";
+                    var e= document.getElementById('showData');
+                    //console.log(data.list);
+                    showdata +="<table id='txt'><tr><th>Name</th><th>ID</th><th>Type</th></tr>";
+                    for(var i=0;i<dataItems.list.length;i++)
+                    {
+                        showdata +="<tr><td>"+dataItems.list[i].name+"</td>";
+                        showdata +="<td>"+dataItems.list[i].id+"</td><td>"+dataItems.list[i].type+"</td></tr>";
+                    }
+                    showdata +="</table>";
+                    console.log(showdata);
+                    e.innerHTML=showdata;
+                };
+                function generateCSVFile()
+                {
+                    var data=dataItems;
+                    if(data == '')
+                        return;
+                    
+                    JSONToCSVConvertor(data, "Vehicle Report", true);
+                    console.log(data);
+                }
+            </script> 
+        <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+            
+        <style>
+            .txtarea{
+                    max-width:100%;
+                    min-height:200px;    
+                    display:block;
+                    width:100%;
+                }
+
+                .mydiv{
+                    padding:10px;
+                }
+
+                .gen_btn{
+                    padding:5px;
+                    background-color:#743ED9;
+                    color:white;
+                    font-family:arial;
+                    font-size:13px;
+                    border:2px solid black;
+                }
+
+                .gen_btn:hover{
+                    background-color:#9a64ff;
+                }
+        </style>
+    </head>
+<body>
+
+    <!-- <button onclick="showDat()">Click</button> -->
+    <p id="showData"> </p>
+    <button onclick="generateCSVFile()">Click</button>
+<!-- <div class='mydiv'>    
+    <textarea id="txt" class='txtarea'>[{"Vehicle":"BMW","Date":"30, Jul 2013 09:24 AM","Location":"Hauz Khas, Enclave, New Delhi, Delhi, India","Speed":42},{"Vehicle":"Honda CBR","Date":"30, Jul 2013 12:00 AM","Location":"Military Road,  West Bengal 734013,  India","Speed":0},{"Vehicle":"Supra","Date":"30, Jul 2013 07:53 AM","Location":"Sec-45, St. Angel's School, Gurgaon, Haryana, India","Speed":58},{"Vehicle":"Land Cruiser","Date":"30, Jul 2013 09:35 AM","Location":"DLF Phase I, Marble Market, Gurgaon, Haryana, India","Speed":83},{"Vehicle":"Suzuki Swift","Date":"30, Jul 2013 12:02 AM","Location":"Behind Central Bank RO, Ram Krishna Rd by-lane, Siliguri, West Bengal, India","Speed":0},{"Vehicle":"Honda Civic","Date":"30, Jul 2013 12:00 AM","Location":"Behind Central Bank RO, Ram Krishna Rd by-lane, Siliguri, West Bengal, India","Speed":0},{"Vehicle":"Honda Accord","Date":"30, Jul 2013 11:05 AM","Location":"DLF Phase IV, Super Mart 1, Gurgaon, Haryana, India","Speed":71}]</textarea>
+    <button class='gen_btn'>Generate File</button>
+</div> -->
+
+<script>
+    /*$(document).ready(function(){
+    $('button').click(function(){
+        var data = $('#txt').val();
+        console.log(data);
+        if(data == '')
+            return;
+        
+        JSONToCSVConvertor(data, "Vehicle Report", true);
+    });
+});*/
+
+function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    
+    var CSV = '';    
+    //Set Report title in first row or line
+    
+    CSV += ReportTitle + '\r\n\n';
+
+    //This condition will generate the Label/Header
+    if (ShowLabel) {
+        var row = "";
+        
+        //This loop will extract the label from 1st index of on array
+        for (var index in arrData[0]) {
+            
+            //Now convert each value to string and comma-seprated
+            row += index + ',';
+        }
+
+        row = row.slice(0, -1);
+        
+        //append Label row with line break
+        CSV += row + '\r\n';
+    }
+    
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+        var row = "";
+        
+        //2nd loop will extract each column and convert it in string comma-seprated
+        for (var index in arrData[i]) {
+            row += '"' + arrData[i][index] + '",';
+        }
+
+        row.slice(0, row.length - 1);
+        
+        //add a line break after each row
+        CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+    
+    //Generate a file name
+    var fileName = "MyReport_";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+
+</body>
+
+</html>
+
+<!-- <html>
+        <head>
+            <title>Demo - Covnert JSON to CSV</title>
+            <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+            <script type="text/javascript" src="https://github.com/douglascrockford/JSON-js/raw/master/json2.js"></script>
+        
+            <script type="text/javascript">
+                // JSON to CSV Converter
+                function ConvertToCSV(objArray) {
+                    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                    var str = '';
+        
+                    for (var i = 0; i < array.length; i++) {
+                        var line = '';
+                        for (var index in array[i]) {
+                            if (line != '') line += ','
+        
+                            line += array[i][index];
+                        }
+        
+                        str += line + '\r\n';
+                    }
+        
+                    return str;
+                }
+        
+                // Example
+                $(document).ready(function () {
+        
+                    // Create Object
+                    var items = [
+                          { name: "Item 1", color: "Green", size: "X-Large" },
+                          { name: "Item 2", color: "Green", size: "X-Large" },
+                          { name: "Item 3", color: "Green", size: "X-Large" }];
+        
+                    // Convert Object to JSON
+                    var jsonObject = JSON.stringify(items);
+        
+                    // Display JSON
+                    $('#json').text(jsonObject);
+        
+                    // Convert JSON to CSV & Display CSV
+                    $('#csv').text(ConvertToCSV(jsonObject));
+                });
+            </script>
+        </head>
+        <body>
+            <h1>
+                JSON</h1>
+            <pre id="json"></pre>
+            <h1>
+                CSV</h1>
+            <pre id="csv"></pre>
+        </body>
+        </html> -->
